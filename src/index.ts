@@ -1,40 +1,20 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { Client } from "@notionhq/client";
 import fastify from "fastify";
+import getFromDb from "./functions/get_from_db";
+import getPages from "./functions/retreiving_page_data";
 
 const server = fastify();
-const notion = new Client({ auth: process.env.NOTION_API_KEY! });
-const databaseId = process.env.NOTION_DATABASE_ID!;
 
 server.get("/", async () => {
-  // The following code takes the database and returns the pages with the title, status, and id
-  const response = await notion.databases.query({ database_id: databaseId });
-  const pages = response.results.map((page) => {
-    if (
-      "properties" in page &&
-      "Name" in page.properties &&
-      "Status" in page.properties &&
-      "title" in page.properties.Name &&
-      Array.isArray(page.properties.Name.title) &&
-      page.properties.Name.title.length > 0 &&
-      "type" in page.properties.Status &&
-      page.properties.Status.type === "status" &&
-      "status" in page.properties.Status &&
-      page.properties.Status.status &&
-      "name" in page.properties.Status.status
-    ) {
-      return {
-        id: page.id,
-        title: page.properties.Name.title[0].plain_text,
-        status: page.properties.Status.status.name,
-      };
-    }
-    return { id: page.id, title: "", status: "" };
-  });
-  console.log(pages);
-  return pages;
+  const db_data = await getFromDb();
+  console.log("Pages:", db_data);
+  const page_data = await Promise.all(
+    db_data.map(async (page) => await getPages(page.id))
+  );
+  console.log("Page data:", page_data);
+  return page_data;
 });
 
 server.get("/health", () => {
