@@ -7,7 +7,7 @@ import getPages from "./functions/retreiving_page_data";
 
 const server = fastify();
 
-server.get("/", async () => {
+server.get("/get_pages_data", async () => {
   const db_data = await getFromDb();
   console.log("Pages:", db_data);
   const page_data = await Promise.all(
