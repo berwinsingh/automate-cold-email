@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { Client } from "@notionhq/client";
-import { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import extractEmailAndLinkedIn from "../functions/extractemail_and_linkedin";
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY! });
 
@@ -49,8 +49,9 @@ export const getBlocks = async (pageId: string) => {
     return block;
   });
 
-  console.log('Filtered blocks with content:', filteredBlocks);
-  return filteredBlocks;
+  const emailAndLinkedIn = extractEmailAndLinkedIn(filteredBlocks);
+  console.log("Email and LinkedIn:", emailAndLinkedIn);
+  return emailAndLinkedIn;
 };
 
 export const getOfficialEmails = async (pageId: string) =>{

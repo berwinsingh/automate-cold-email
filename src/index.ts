@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import fastify from "fastify";
-import getFromDb from "./functions/get_from_db";
-import getPages from "./functions/retreiving_page_data";
+import getFromDb from "./notion_functions/get_from_db";
+import getPages from "./notion_functions/retreiving_page_data";
 
 const server = fastify();
 

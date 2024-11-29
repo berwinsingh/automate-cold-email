@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { Client } from "@notionhq/client";
-import {getBlocks} from "../notion_functions/get_blocks";
+import { getBlocks } from "./get_blocks";
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY! });
 
