@@ -9,11 +9,10 @@ const server = fastify();
 
 server.get("/get_pages_data", async () => {
   const db_data = await getFromDb();
-  console.log("Pages:", db_data);
+  // console.log("Pages:", db_data);
   const page_data = await Promise.all(
     db_data.map(async (page) => await getPages(page.id))
   );
-  console.log("Page data:", page_data);
   return page_data;
 });
 

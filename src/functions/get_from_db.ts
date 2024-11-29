@@ -29,7 +29,8 @@ const getFromDb = async () => {
         };
     }
     return { id: page.id, title: "", status: "" };
-  });
+  }).filter(page => page.status==='Lead') //Only returning the pages that have lead
+
   return pages;
 };
 
